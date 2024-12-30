@@ -1,6 +1,9 @@
-### cloudsim
+```markdown
+### CloudSim
 
-# my scheduler
+#### My Scheduler
+
+```java
 package org.cloudbus.cloudsim;
 
 import java.text.DecimalFormat;
@@ -25,15 +28,13 @@ public class MyCustomScheduler {
       // First step: Initialize the CloudSim package. It should be called before
       // creating any entities.
       int num_user = 1; // number of cloud users
-      Calendar calendar = Calendar.getInstance(); // Calendar whose fields have been initialized with the current date
-                                                  // and time.
+      Calendar calendar = Calendar.getInstance(); // Calendar initialized with the current date and time
       boolean trace_flag = false; // trace events
 
       CloudSim.init(num_user, calendar, trace_flag);
 
       // Second step: Create Datacenters
-      // Datacenters are the resource providers in CloudSim. We need at
-      // list one of them to run a CloudSim simulation
+      // Datacenters are the resource providers in CloudSim. We need at least one of them to run a simulation.
 
       // Third step: Create Broker
       DatacenterBroker broker = createBroker();
@@ -48,16 +49,16 @@ public class MyCustomScheduler {
       long size = 10000; // image size (MB)
       int ram = 512; // vm memory (MB)
       long bw = 1000;
-      int pesNumber = 1; // number of cpus
+      int pesNumber = 1; // number of CPUs
       String vmm = "Xen"; // VMM name
 
-      // create VM
+      // Create VM
       Vm vm = new Vm(vmid, brokerId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
 
-      // add the VM to the vmList
+      // Add the VM to the vmList
       vmlist.add(vm);
 
-      // submit vm list to the broker
+      // Submit vm list to the broker
       broker.submitGuestList(vmlist);
 
       // Fifth step: Create one Cloudlet
@@ -70,37 +71,32 @@ public class MyCustomScheduler {
       long outputSize = 300;
       UtilizationModel utilizationModel = new UtilizationModelFull();
 
-      Cloudlet cloudlet = new Cloudlet(id, length, pesNumber, fileSize,
-          outputSize, utilizationModel, utilizationModel,
-          utilizationModel);
+      Cloudlet cloudlet = new Cloudlet(id, length, pesNumber, fileSize, outputSize, utilizationModel, utilizationModel, utilizationModel);
       cloudlet.setUserId(brokerId);
       cloudlet.setGuestId(vmid);
 
-      // add the cloudlet to the list
+      // Add the cloudlet to the list
       cloudletList.add(cloudlet);
 
-      // submit cloudlet list to the broker
+      // Submit cloudlet list to the broker
       broker.submitCloudletList(cloudletList);
 
-      // Sixth step: Starts the simulation
+      // Sixth step: Start the simulation
       CloudSim.startSimulation();
 
       CloudSim.stopSimulation();
 
-      // Final step: Print results when simulation is over
+      // Final step: Print results when the simulation is over
       List<Cloudlet> newList = broker.getCloudletReceivedList();
       printCloudletList(newList);
 
       Log.println("MyCustomSimulation finished!");
     } catch (Exception e) {
       e.printStackTrace();
-      Log.println("Unwanted errors happen");
+      Log.println("Unwanted errors happened.");
     }
   }
 
-  // We strongly encourage users to develop their own broker policies, to
-  // submit vms and cloudlets according
-  // to the specific rules of the simulated scenario
   /**
    * Creates the broker.
    *
@@ -150,39 +146,68 @@ public class MyCustomScheduler {
       }
     }
   }
-} 
+}
+```
 
+#### Commands
 
-# commands 
+1. Clone the repository:
 
-git clone https://github.com/Cloudslab/cloudsim.git
+   ```bash
+   git clone https://github.com/Cloudslab/cloudsim.git
+   ```
 
-> in cloudsim folder
+2. Navigate to the CloudSim folder and install dependencies:
 
-sudo apt install maven && sudo apt install openjdk-21-jdk && sudo update-java-alternatives --set java-1.21.0-openjdk-amd64 && mvn install && mvn test
+   ```bash
+   sudo apt install maven && sudo apt install openjdk-21-jdk
+   sudo update-java-alternatives --set java-1.21.0-openjdk-amd64
+   mvn install && mvn test
+   ```
 
->is code ko modules/cloudsim/src/main/java/org/cloudbus/cloudsim waale folder me MyCustomScheduler.java file me save karna hai
+3. Save the code in the following path:
 
-mvn exec:java -pl modules/cloudsim/ -Dexec.mainClass=org.cloudbus.cloudsim.MyCustomScheduler
+   ```
+   modules/cloudsim/src/main/java/org/cloudbus/cloudsim/MyCustomScheduler.java
+   ```
 
-### openstack 
+4. Execute the custom scheduler:
 
-# command
+   ```bash
+   mvn exec:java -pl modules/cloudsim/ -Dexec.mainClass=org.cloudbus.cloudsim.MyCustomScheduler
+   ```
 
-sudo snap install microstack --beta && sudo microstack init --auto --control && sudo snap get microstack config.credentials.keystone-password
+---
 
-### gcloud 
+### OpenStack
 
-# command
+#### Install and Initialize MicroStack
 
+```bash
+sudo snap install microstack --beta
+sudo microstack init --auto --control
+sudo snap get microstack config.credentials.keystone-password
+```
+
+---
+
+### Google Cloud (GCloud)
+
+#### Setup Commands
+
+```bash
 gcloud init
-
 gcloud projects create projname
+gcloud app create
+```
 
-gcloud app create 
+---
 
-### vm file teansfere
+### VM File Transfer
 
-# command
+#### Using SCP
 
-scp path to file uname@ip:destination path
+```bash
+scp path_to_file uname@ip:destination_path
+```
+```
